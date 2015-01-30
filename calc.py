@@ -10,6 +10,10 @@ from kivy.uix.button import Button
 class CalcApp(App):
 
     def build(self):
+        font_size       = 50
+        equal_color     = [0,1,1,1]
+        operator_color  = [0,0,1,1]
+
         entire_area = BoxLayout(orientation="vertical", padding=40)
         textinput   = TextInput(
             text='Enter Math Here',
@@ -33,9 +37,14 @@ class CalcApp(App):
 
         for i in xrange(0, 10):
             number = str(i)
-            number_pad.add_widget(Button(text= number))
-        number_pad.add_widget(Button(text="."))
-        number_pad.add_widget(Button(text="="))
+            number_pad.add_widget(Button(text= number, font_size=font_size))
+        number_pad.add_widget(Button(text=".", font_size=font_size))
+        number_pad.add_widget(
+            Button(
+                text="=",
+                font_size=font_size,
+                background_color=equal_color)
+        )
 
         operation_pad   = GridLayout(
             cols=1,
@@ -44,10 +53,10 @@ class CalcApp(App):
 
         )
 
-        operation_pad.add_widget(Button(text="+"))
-        operation_pad.add_widget(Button(text="-"))
-        operation_pad.add_widget(Button(text="x"))
-        operation_pad.add_widget(Button(text="/"))
+        operation_pad.add_widget(Button(text="+", font_size=font_size, background_color=operator_color))
+        operation_pad.add_widget(Button(text="-", font_size=font_size, background_color=operator_color))
+        operation_pad.add_widget(Button(text="x", font_size=font_size, background_color=operator_color))
+        operation_pad.add_widget(Button(text="/", font_size=font_size, background_color=operator_color))
 
 
 
