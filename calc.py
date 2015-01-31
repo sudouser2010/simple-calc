@@ -7,20 +7,40 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.button import Button
 
 
+class InputButton(Button):
+
+    def __init__(self, *args, **kwargs):
+        super(InputButton, self).__init__(*args, **kwargs)
+        self.font_size  = 50
+        self.textinput  = kwargs["textinput"]
+
+    def on_press(self):
+        self.textinput.text += self.text
+
+
+class OperatorButton(InputButton):
+
+    def __init__(self, *args, **kwargs):
+        super(OperatorButton, self).__init__(*args, **kwargs)
+        self.background_color = [0,0,1,1]
+
+
+
 class CalcApp(App):
 
     def build(self):
         font_size       = 50
         equal_color     = [0,1,1,1]
-        operator_color  = [0,0,1,1]
+
 
         entire_area = BoxLayout(orientation="vertical", padding=40)
         textinput   = TextInput(
-            text='Enter Math Here',
+            text='',
             multiline=False,
             size_hint=(1, .3),
             font_size=68,
         )
+        top_area    = BoxLayout(size_hint=(1, .3))
         bottom_area = BoxLayout(
             orientation="horizontal",
             size_hint=(1, 1),
@@ -37,8 +57,9 @@ class CalcApp(App):
 
         for i in xrange(0, 10):
             number = str(i)
-            number_pad.add_widget(Button(text= number, font_size=font_size))
-        number_pad.add_widget(Button(text=".", font_size=font_size))
+            number_pad.add_widget(InputButton(text=number, textinput=textinput))
+        number_pad.add_widget(InputButton(text=".", textinput=textinput))
+
         number_pad.add_widget(
             Button(
                 text="=",
@@ -53,17 +74,18 @@ class CalcApp(App):
 
         )
 
-        operation_pad.add_widget(Button(text="+", font_size=font_size, background_color=operator_color))
-        operation_pad.add_widget(Button(text="-", font_size=font_size, background_color=operator_color))
-        operation_pad.add_widget(Button(text="x", font_size=font_size, background_color=operator_color))
-        operation_pad.add_widget(Button(text="/", font_size=font_size, background_color=operator_color))
+        for operation in ["+", "-", "x", "/"]:
+            operation_pad.add_widget(OperatorButton(text=operation, textinput=textinput))
+
 
 
 
         entire_area.add_widget(textinput)
+        entire_area.add_widget(bottom_area)
+
         bottom_area.add_widget(number_pad)
         bottom_area.add_widget(operation_pad)
-        entire_area.add_widget(bottom_area)
+
 
 
 
