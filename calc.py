@@ -27,14 +27,46 @@ class OperatorButton(InputButton):
 
 
 class CalcApp(App):
+    font_size       = 50
+    equal_color     = [0,1,1,1]
+
+    def build_operation_pad(self):
+        operation_pad   = GridLayout(
+            cols=1,
+            size_hint=(.2, 1),
+            spacing=10,
+        )
+
+        for operation in ["+", "-", "x", "/"]:
+            operation_pad.add_widget(OperatorButton(text=operation, textinput=CalcApp.textinput))
+
+        return operation_pad
+
+    def build_number_pad(self):
+        number_pad      = GridLayout(
+            cols=3,
+            size_hint=(1, 1),
+            spacing=10,
+        )
+
+        for i in xrange(0, 10):
+            number = str(i)
+            number_pad.add_widget(InputButton(text=number, textinput=CalcApp.textinput))
+        number_pad.add_widget(InputButton(text=".", textinput=CalcApp.textinput))
+
+        number_pad.add_widget(
+            Button(
+                text="=",
+                font_size=CalcApp.font_size,
+                background_color=CalcApp.equal_color)
+        )
+        return number_pad
 
     def build(self):
-        font_size       = 50
-        equal_color     = [0,1,1,1]
 
 
         entire_area = BoxLayout(orientation="vertical", padding=40)
-        textinput   = TextInput(
+        CalcApp.textinput   = TextInput(
             text='',
             multiline=False,
             size_hint=(1, .3),
@@ -49,38 +81,16 @@ class CalcApp(App):
         )
 
 
-        number_pad      = GridLayout(
-            cols=3,
-            size_hint=(1, 1),
-            spacing=10,
-        )
 
-        for i in xrange(0, 10):
-            number = str(i)
-            number_pad.add_widget(InputButton(text=number, textinput=textinput))
-        number_pad.add_widget(InputButton(text=".", textinput=textinput))
 
-        number_pad.add_widget(
-            Button(
-                text="=",
-                font_size=font_size,
-                background_color=equal_color)
-        )
-
-        operation_pad   = GridLayout(
-            cols=1,
-            size_hint=(.2, 1),
-            spacing=10,
-
-        )
-
-        for operation in ["+", "-", "x", "/"]:
-            operation_pad.add_widget(OperatorButton(text=operation, textinput=textinput))
+        number_pad      = self.build_number_pad()
+        operation_pad   = self.build_operation_pad()
 
 
 
 
-        entire_area.add_widget(textinput)
+
+        entire_area.add_widget(CalcApp.textinput)
         entire_area.add_widget(bottom_area)
 
         bottom_area.add_widget(number_pad)
