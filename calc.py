@@ -11,24 +11,32 @@ class InputButton(Button):
 
     def __init__(self, *args, **kwargs):
         super(InputButton, self).__init__(*args, **kwargs)
-        self.font_size  = 50
-        self.textinput  = kwargs["textinput"]
+        self.font_size  = CalcApp.font_size
 
     def on_press(self):
-        self.textinput.text += self.text
+        CalcApp.textinput.text += self.text
 
 
 class OperatorButton(InputButton):
 
     def __init__(self, *args, **kwargs):
         super(OperatorButton, self).__init__(*args, **kwargs)
-        self.background_color = [0,0,1,1]
-
+        self.background_color = CalcApp.operator_color
 
 
 class CalcApp(App):
     font_size       = 50
     equal_color     = [0,1,1,1]
+    operator_color  = [0,0,1,1]
+
+    #made text input a class variable b/c I wanted to make it easy to access
+    textinput       = TextInput(
+        text='',
+        multiline=False,
+        size_hint=(1, 1),
+        font_size=68,
+    )
+
 
     def build_operation_pad(self):
         operation_pad   = GridLayout(
@@ -38,7 +46,7 @@ class CalcApp(App):
         )
 
         for operation in ["+", "-", "x", "/"]:
-            operation_pad.add_widget(OperatorButton(text=operation, textinput=CalcApp.textinput))
+            operation_pad.add_widget(OperatorButton(text=operation))
 
         return operation_pad
 
@@ -51,8 +59,8 @@ class CalcApp(App):
 
         for i in xrange(0, 10):
             number = str(i)
-            number_pad.add_widget(InputButton(text=number, textinput=CalcApp.textinput))
-        number_pad.add_widget(InputButton(text=".", textinput=CalcApp.textinput))
+            number_pad.add_widget(InputButton(text=number))
+        number_pad.add_widget(InputButton(text="."))
 
         number_pad.add_widget(
             Button(
@@ -62,43 +70,45 @@ class CalcApp(App):
         )
         return number_pad
 
-    def build(self):
+    def define_top_area(self):
+        return BoxLayout(size_hint=(1, .3))
 
+    def define_entire_area(self):
+        return BoxLayout(orientation="vertical", padding=40)
 
-        entire_area = BoxLayout(orientation="vertical", padding=40)
-        CalcApp.textinput   = TextInput(
-            text='',
-            multiline=False,
-            size_hint=(1, .3),
-            font_size=68,
-        )
-        top_area    = BoxLayout(size_hint=(1, .3))
-        bottom_area = BoxLayout(
+    def define_bottom_area(self):
+        return BoxLayout(
             orientation="horizontal",
             size_hint=(1, 1),
             spacing=40,
             padding=[0,40,0,0]
         )
 
+    def build(self):
+        """
+            This function build the entire area of app using the top and bottom
+            parts of calculator app
+        """
+        #define main areas of app
+        entire_area = self.define_entire_area()
+        top_area    = self.define_top_area()
+        bottom_area = self.define_bottom_area()
 
-
-
-        number_pad      = self.build_number_pad()
-        operation_pad   = self.build_operation_pad()
-
-
-
-
-
-        entire_area.add_widget(CalcApp.textinput)
+        #build app from main areas
+        entire_area.add_widget(top_area)
         entire_area.add_widget(bottom_area)
 
+        #build  top area
+        top_area.add_widget(CalcApp.textinput)
+
+        #build bottom area
+        number_pad      = self.build_number_pad()
+        operation_pad   = self.build_operation_pad()
         bottom_area.add_widget(number_pad)
         bottom_area.add_widget(operation_pad)
 
 
-
-
+        #return entire area
         return entire_area
 
 if __name__ == "__main__":
