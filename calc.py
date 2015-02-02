@@ -11,7 +11,7 @@ class InputButton(Button):
 
     def __init__(self, *args, **kwargs):
         super(InputButton, self).__init__(*args, **kwargs)
-        self.font_size  = CalcApp.font_size
+        self.font_size  = CalcApp.button_font_size
 
     def on_press(self):
         CalcApp.textinput.text += self.text
@@ -25,16 +25,21 @@ class OperatorButton(InputButton):
 
 
 class CalcApp(App):
-    font_size       = 50
+
+    #sets up characteristics of calculator app
+    button_font_size= 50
+    input_font_size = 68
     equal_color     = [0,1,1,1]
     operator_color  = [0,0,1,1]
+    padding         = 40
+    spacing         = 10
 
     #made text input a class variable b/c I wanted to make it easy to access
     textinput       = TextInput(
         text='',
         multiline=False,
         size_hint=(1, 1),
-        font_size=68,
+        font_size=input_font_size,
     )
 
 
@@ -42,7 +47,7 @@ class CalcApp(App):
         operation_pad   = GridLayout(
             cols=1,
             size_hint=(.2, 1),
-            spacing=10,
+            spacing=CalcApp.spacing,
         )
 
         for operation in ["+", "-", "x", "/"]:
@@ -54,7 +59,7 @@ class CalcApp(App):
         number_pad      = GridLayout(
             cols=3,
             size_hint=(1, 1),
-            spacing=10,
+            spacing=CalcApp.spacing,
         )
 
         for i in xrange(0, 10):
@@ -65,7 +70,7 @@ class CalcApp(App):
         number_pad.add_widget(
             Button(
                 text="=",
-                font_size=CalcApp.font_size,
+                font_size=CalcApp.button_font_size,
                 background_color=CalcApp.equal_color)
         )
         return number_pad
@@ -80,8 +85,8 @@ class CalcApp(App):
         return BoxLayout(
             orientation="horizontal",
             size_hint=(1, 1),
-            spacing=40,
-            padding=[0,40,0,0]
+            spacing=CalcApp.padding,
+            padding=[0,CalcApp.padding,0,0]
         )
 
     def build(self):
@@ -106,7 +111,6 @@ class CalcApp(App):
         operation_pad   = self.build_operation_pad()
         bottom_area.add_widget(number_pad)
         bottom_area.add_widget(operation_pad)
-
 
         #return entire area
         return entire_area
