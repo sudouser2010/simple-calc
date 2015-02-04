@@ -35,6 +35,18 @@ class EqualButton(Button):
     def on_press(self):
         print "this will do something"
 
+class ClearButton(Button):
+
+    def __init__(self, *args, **kwargs):
+        super(Button, self).__init__(*args, **kwargs)
+        self.font_size          = CalcApp.button_font_size
+        self.text               = "clear"
+        self.background_color   = CalcApp.clear_color
+        self.size_hint          = (.3, 1)
+
+    def on_press(self):
+        CalcApp.textinput.text = ""
+
 class CalcApp(App):
 
     #sets up characteristics of calculator app
@@ -82,20 +94,11 @@ class CalcApp(App):
         number_pad.add_widget(EqualButton())
         return number_pad
 
-    def define_clear_button(self):
-        return Button(
-            text="clear",
-            font_size=CalcApp.button_font_size,
-            background_color=CalcApp.clear_color,
-            size_hint=(.3, 1),
-        )
-
-
     def define_top_area(self):
         return BoxLayout(size_hint=(1, .3))
 
     def define_entire_area(self):
-        return BoxLayout(orientation="vertical", padding=40)
+        return BoxLayout(orientation="vertical", padding=CalcApp.padding)
 
     def define_bottom_area(self):
         return BoxLayout(
@@ -120,9 +123,8 @@ class CalcApp(App):
         entire_area.add_widget(bottom_area)
 
         #build  top area
-        clear_button = self.define_clear_button()
         top_area.add_widget(CalcApp.textinput)
-        top_area.add_widget(clear_button)
+        top_area.add_widget(ClearButton())
 
         #build bottom area
         number_pad      = self.build_number_pad()
