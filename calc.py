@@ -24,11 +24,23 @@ class OperatorButton(InputButton):
         self.background_color = CalcApp.operator_color
 
 
+class EqualButton(Button):
+
+    def __init__(self, *args, **kwargs):
+        super(Button, self).__init__(*args, **kwargs)
+        self.font_size          = CalcApp.button_font_size
+        self.text               = "="
+        self.background_color   = CalcApp.equal_color
+
+    def on_press(self):
+        print "this will do something"
+
 class CalcApp(App):
 
     #sets up characteristics of calculator app
     button_font_size= 50
     input_font_size = 68
+    clear_color     = [1,0,0,1]
     equal_color     = [0,1,1,1]
     operator_color  = [0,0,1,1]
     padding         = 40
@@ -67,13 +79,17 @@ class CalcApp(App):
             number_pad.add_widget(InputButton(text=number))
         number_pad.add_widget(InputButton(text="."))
 
-        number_pad.add_widget(
-            Button(
-                text="=",
-                font_size=CalcApp.button_font_size,
-                background_color=CalcApp.equal_color)
-        )
+        number_pad.add_widget(EqualButton())
         return number_pad
+
+    def define_clear_button(self):
+        return Button(
+            text="clear",
+            font_size=CalcApp.button_font_size,
+            background_color=CalcApp.clear_color,
+            size_hint=(.3, 1),
+        )
+
 
     def define_top_area(self):
         return BoxLayout(size_hint=(1, .3))
@@ -104,7 +120,9 @@ class CalcApp(App):
         entire_area.add_widget(bottom_area)
 
         #build  top area
+        clear_button = self.define_clear_button()
         top_area.add_widget(CalcApp.textinput)
+        top_area.add_widget(clear_button)
 
         #build bottom area
         number_pad      = self.build_number_pad()
