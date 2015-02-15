@@ -1,11 +1,11 @@
 from kivy.app import App
-
 from kivy.uix.label import Label
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.textinput import TextInput
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.button import Button
 
+import re
 
 class InputButton(Button):
 
@@ -33,7 +33,16 @@ class EqualButton(Button):
         self.background_color   = CalcApp.equal_color
 
     def on_press(self):
-        print "this will do something"
+        try:
+            matchObj        = re.match(CalcApp.input_regex, CalcApp.textinput.text)
+            left_operand    = matchObj.group(1)
+            operator        = matchObj.group(2)
+            right_operand   = matchObj.group(3)
+
+            #this is where text input will be processed
+        except:
+            print "error with user input"
+
 
 class ClearButton(Button):
 
@@ -57,6 +66,10 @@ class CalcApp(App):
     operator_color  = [0,0,1,1]
     padding         = 40
     spacing         = 10
+
+    decimal_regex   = r'([-+]?\d*\.*\d+)'       #definition of decimal in regex
+    operations      = '([-+*/])'                #character class for allowed operations
+    input_regex     = r'{0}{1}{0}'.format(decimal_regex, operations)
 
     #made text input a class variable b/c I wanted to make it easy to access
     textinput       = TextInput(
