@@ -87,7 +87,7 @@ class CalcApp(App):
             spacing=CalcApp.spacing,
         )
 
-        for operation in ["+", "-", "x", "/"]:
+        for operation in ["+", "-", "*", "/"]:
             operation_pad.add_widget(OperatorButton(text=operation))
 
         return operation_pad
