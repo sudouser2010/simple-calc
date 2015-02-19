@@ -6,6 +6,7 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.button import Button
 
 import re
+import calculator
 
 class InputButton(Button):
 
@@ -35,11 +36,17 @@ class EqualButton(Button):
     def on_press(self):
         try:
             matchObj        = re.match(CalcApp.input_regex, CalcApp.textinput.text)
-            left_operand    = matchObj.group(1)
+            left_operand    = int(matchObj.group(1))
             operator        = matchObj.group(2)
-            right_operand   = matchObj.group(3)
+            right_operand   = int(matchObj.group(3))
 
-            #this is where text input will be processed
+            #this codifies the operator as an integer for the calc module
+            operator_int    = ['+','-','*','/'].index(operator)
+
+            #this is where text input will be processed by the calculator module
+            result = calculator.process_input(left_operand, right_operand, operator_int)
+            CalcApp.textinput.text = str(result)
+
         except:
             print "error with user input"
 
