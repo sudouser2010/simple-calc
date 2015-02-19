@@ -9,20 +9,20 @@ def process_input(left=0, right=0, op=0):
         #when op is +
         result = left + right
 
-    elif op == 1:
+    if op == 1:
         #when op is -
         result = left - right
 
-    elif op == 2:
+    if op == 2:
         #when op is *
         result = left * right
 
-    elif op == 3:
+    if op == 3:
         #when op is /
         result = left / right
 
-    else:
-        #when op is neither
+    if op == 4:
+        #when op is not operation covered by calculator
         assert False
 
     return result
