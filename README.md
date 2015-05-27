@@ -1,6 +1,7 @@
 SIMPLE-CALC
 ===========
-A crossplatform mobile calculator app
+A crossplatform mobile calculator app<br><br>
+This calculator.py file in this branch intentionally has many asserts that will raise an error. This was done so ![Halfwaytree](https://github.com/sudouser2010/halfwaytree "Symbolic Execution Python Program") could symbolically execute calculator.py to determine the input values that cause thoses errors to occur.
 
 ###About Simple-Calc
     Simple-Calc was built with Kivy,
